@@ -114,9 +114,10 @@ def view_members(connection):
 
 def view_genres(connection):
     with connection:
-        rows = connection.execute(VIEW_GENRES).fetchall()
-        for row in rows:
-            print(row)
+        # rows = connection.execute(VIEW_GENRES).fetchall()
+        # for row in rows:
+        #     print(row)
+        print(pd.read_sql_query(VIEW_GENRES, connection))
 
 
 def search_book(connection, title):

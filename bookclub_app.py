@@ -102,7 +102,6 @@ def menu_search_by_rating(connection):
 
 # 5 - View all genres.
 def menu_view_genres(connection):
-    print("Genre | Number of books")
     db.view_genres(connection)
 
 
@@ -132,7 +131,6 @@ def menu_add_member_data(connection):
 
 # 9 - View all members.
 def menu_view_members(connection):
-    print("Member ID | Member name | Member email")
     db.view_members(connection)
 
 
