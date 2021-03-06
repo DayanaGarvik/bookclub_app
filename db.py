@@ -1,7 +1,4 @@
 import sqlite3
-import pandas as pd
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', None)
 
 
 # ---------------------- INITIATE AND POPULATE DB ------------------------- #
@@ -42,9 +39,6 @@ SEARCH_MEMBER = """SELECT members.member_name, members.email, COUNT(ratings.rati
 SEARCH_GENRE = """SELECT books.title, books.author, genres.book_genre FROM books
                 LEFT JOIN genres ON books.genre=genres.book_genre
                 WHERE genre=(?)"""
-SEARCH_BY_RATING = """SELECT books.bookid, books.title, books.author, books.genre, ratings.rating FROM books
-                    LEFT JOIN ratings ON books.bookid=ratings.book_id
-                    WHERE ratings.rating=(?)"""
 
 # ------------------------------------- DELETE/UPDATE ----------------------------- #
 DELETE_BOOK = "DELETE FROM books WHERE title=?"
@@ -95,29 +89,23 @@ def add_rating(connection, title, member_email, rating):
 
 def view_books(connection):
     with connection:
-        # For displaying rows as a list of tuples change the pd.read_sql_query command to the following:
-
-        # rows = connection.execute(VIEW_BOOKS).fetchall()
-        # for row in rows:
-        #     print(row)
-
-        print(pd.read_sql_query(VIEW_BOOKS, connection, index_col=['bookid']))
+        rows = connection.execute(VIEW_BOOKS).fetchall()
+        for row in rows:
+            print(row)
 
 
 def view_members(connection):
     with connection:
-        # rows = connection.execute(VIEW_MEMBERS).fetchall()
-        # for row in rows:
-        #     print(row)
-        print(pd.read_sql_query(VIEW_MEMBERS, connection, index_col=['memberid']))
+        rows = connection.execute(VIEW_MEMBERS).fetchall()
+        for row in rows:
+            print(row)
 
 
 def view_genres(connection):
     with connection:
-        # rows = connection.execute(VIEW_GENRES).fetchall()
-        # for row in rows:
-        #     print(row)
-        print(pd.read_sql_query(VIEW_GENRES, connection))
+        rows = connection.execute(VIEW_GENRES).fetchall()
+        for row in rows:
+            print(row)
 
 
 def search_book(connection, title):
@@ -137,13 +125,6 @@ def search_member(connection, member_name):
 def search_genre(connection, genre):
     with connection:
         rows = connection.execute(SEARCH_GENRE, (genre,)).fetchall()
-        for row in rows:
-            print(row)
-
-
-def search_by_ratings(connection, rating):
-    with connection:
-        rows = connection.execute(SEARCH_BY_RATING, (rating,)).fetchall()
         for row in rows:
             print(row)
 
