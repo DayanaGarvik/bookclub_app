@@ -2,7 +2,6 @@ import sqlite3
 import db
 
 
-
 APP_MENU = """
  ___________________
 |   BOOKCLUB APP    |
@@ -13,19 +12,20 @@ APP_MENU = """
 |1 - Add a new book.                             |
 |2 - View all the books (sorted by rating).      |
 |3 - Find a book (by title).                     |
-|4 - View all genres.                            |
-|5 - Delete a book (by title).                   |
-|6 - Update book (by bookid).                    |
+|4 - Find books (by genre).                      |
+|5 - View all genres.                            |
+|6 - Delete a book (by title).                   |
+|7 - Update book (by bookid).                    |
 |        * MEMBERS *                             |
-|7 - Add a new member.                           |
-|8 - View all members.                           |
-|9 - Find member and number of books read.       |
-|10 - Delete a member (by email).                |
-|11 - Update member.                             |
+|8 - Add a new member.                           |
+|9 - View all members.                           |
+|10 - Find member and number of books read.      |
+|11 - Delete a member (by email).                |
+|12 - Update member.                             |
 |        ***                                     |
-|12 - Add book rating from a member (by email).  |
+|13 - Add book rating from a member (by email).  |
 |        ***                                     |
-|13 - EXIT                                       | 
+|14 - EXIT                                       | 
 |________________________________________________|
 Your selection: 
 """
@@ -44,24 +44,26 @@ def menu():
         elif user_input == "3":
             menu_search_book(connection)
         elif user_input == "4":
-            menu_view_genres(connection)
+            menu_search_genre(connection)
         elif user_input == "5":
-            menu_delete_book(connection)
+            menu_view_genres(connection)
         elif user_input == "6":
-            menu_update_book(connection)
+            menu_delete_book(connection)
         elif user_input == "7":
-            menu_add_member_data(connection)
+            menu_update_book(connection)
         elif user_input == "8":
-            menu_view_members(connection)
+            menu_add_member_data(connection)
         elif user_input == "9":
-            menu_find_member(connection)
+            menu_view_members(connection)
         elif user_input == "10":
-            menu_delete_member(connection)
+            menu_find_member(connection)
         elif user_input == "11":
-            menu_update_member(connection)
+            menu_delete_member(connection)
         elif user_input == "12":
-            menu_add_rating(connection)
+            menu_update_member(connection)
         elif user_input == "13":
+            menu_add_rating(connection)
+        elif user_input == "14":
             print("Exiting the program.")
             break
 
@@ -92,19 +94,26 @@ def menu_search_book(connection):
     db.search_book(connection, title)
 
 
-# 4 - View all genres.
+# 4 - Find a book by genre.
+def menu_search_genre(connection):
+    genre = input("Enter genre: ")
+    print("BookID, Title, Author, Genre, Rating:\n")
+    db.search_genre(connection, genre)
+
+
+# 5 - View all genres.
 def menu_view_genres(connection):
     db.view_genres(connection)
 
 
-# 5 - Delete a book by title.
+# 6 - Delete a book by title.
 def menu_delete_book(connection):
     title_to_delete = input("Enter title to delete: ")
     db.delete_book(connection, title_to_delete)
     print("Book {} deleted".format(title_to_delete))
 
 
-# 6 - Update book by bookid.
+# 7 - Update book by bookid.
 def menu_update_book(connection):
     new_title = input("New title: ")
     new_author = input("New author: ")
@@ -113,7 +122,8 @@ def menu_update_book(connection):
     db.update_book(connection, new_title, new_author, new_genre, bookid)
     print("Book updated.")
 
-# 7 - Add a new member.
+
+# 8 - Add a new member.
 def menu_add_member_data(connection):
     member_name = input("Enter member name: ")
     member_email = input("Enter member email: ")
@@ -121,25 +131,25 @@ def menu_add_member_data(connection):
     print("{} added to the list.".format(member_name))
 
 
-# 8 - View all members.
+# 9 - View all members.
 def menu_view_members(connection):
     db.view_members(connection)
 
 
-# 9 - Find member by name.
+# 10 - Find member by name.
 def menu_find_member(connection):
     name = input("Enter member name to search for: ")
     db.search_member(connection, name)
 
 
-# 10 - Delete a member by email.
+# 11 - Delete a member by email.
 def menu_delete_member(connection):
     email = input("Enter email of a member you want to remove: ")
     db.delete_member(connection, email)
     print("Member removed.")
 
 
-# 11 - Update member.
+# 12 - Update member.
 def menu_update_member(connection):
     member_name = input("Enter new name: ")
     member_email = input("Enter new email: ")
@@ -148,7 +158,7 @@ def menu_update_member(connection):
     print("Member updated.")
 
 
-# 12 - Add book rating from a member (by email).
+# 13 - Add book rating from a member (by email).
 def menu_add_rating(connection):
     book_title = input("Enter book title: ")
     email = input("Enter member email: ")
