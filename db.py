@@ -1,7 +1,7 @@
 import sqlite3
 
 
-# ---------------------- INITIATE AND POPULATE DB ------------------------- #
+# ---------------------- INITIATE/POPULATE ------------------------- #
 CREATE_BOOKS_TABLE = """CREATE TABLE IF NOT EXISTS books (bookid INTEGER PRIMARY KEY, 
               title TEXT, author TEXT, genre TEXT)"""
 INSERT_BOOK = "INSERT INTO books VALUES (NULL, ?, ?, ?)"
@@ -19,11 +19,7 @@ INSERT_RATING = """INSERT INTO ratings (book_id, member_id, rating)
               (SELECT memberid FROM members WHERE members.email=(?)), ?)"""
 
 
-# CREATE_GENRE_TABLE = "CREATE TABLE IF NOT EXISTS genres (book_genre TEXT PRIMARY KEY)"
-# INSERT_GENRE = "INSERT INTO genres VALUES (?)"
-
-
-# ----------------------------------- QUERIES -------------------------------- #
+# ----------------------------------- FETCH/SEARCH -------------------------------- #
 VIEW_BOOKS = """SELECT books.bookid, books.title, books.author, books.genre, ROUND(AVG(ratings.rating),1) as book_rating 
               FROM books LEFT JOIN ratings ON ratings.book_id = books.bookid
               GROUP BY books.bookid ORDER BY book_rating DESC"""
@@ -50,7 +46,7 @@ UPDATE_BOOK = "UPDATE books SET title=?, author=?, genre=? WHERE bookid=(?)"
 UPDATE_MEMBER = "UPDATE members SET member_name=?, email=? WHERE memberid=(?)"
 
 
-# ---------------------- INITIATE AND POPULATE DB ------------------------- #
+# ---------------------- INITIATE/POPULATE ------------------------- #
 def connect():
     return sqlite3.connect("bookclub.db")
 
@@ -76,7 +72,7 @@ def add_rating(connection, title, member_email, rating):
     with connection:
         connection.execute(INSERT_RATING, (title, member_email, rating))
 
-# ----------------------------------- QUERIES -------------------------------- #
+# ----------------------------------- FETCH/SEARCH -------------------------------- #
 
 
 def view_books(connection):
@@ -147,6 +143,15 @@ def update_member(connection, member_name, email, memberid):
     with connection:
         connection.execute(UPDATE_MEMBER, (member_name, email, memberid))
 
+
+# --------------------------- SEND EMAIL ------------------------- #
+def send_email(connection):
+    with connection:
+        rows = connection.execute(VIEW_MEMBERS).fetchall()
+        member_list = []
+        for row in rows:
+            member_list.append(row[2])
+        print(member_list)
 
 
 

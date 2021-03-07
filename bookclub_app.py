@@ -72,6 +72,12 @@ def menu():
 
 
 # ---------------------------- FUNCTIONS FOR THE MENU ----------------------- #
+
+# Send email to all members
+def send_email_to_members(connection):
+    pass
+
+
 # 1 - Add a new book.
 def menu_add_book_data(connection):
     title = input("Enter book title: ")
